@@ -1,11 +1,21 @@
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
+import cors from 'cors';
 
 // Load environment variables from .env file
 dotenv.config();
 
 export const app = express();
+
+// CORS configuration
+app.use(cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173', // Allow your frontend URL
+    credentials: true, // Allow cookies to be sent
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json()); // Middleware to parse JSON bodies
 
 // --- WHY: Centralized connection is efficient. ---
@@ -23,7 +33,7 @@ const connectDB = async () => {
         console.log("MongoDB successfully connected!");
 
         // Start the Express server only after a successful DB connection
-        const PORT = process.env.PORT || 3000;
+        const PORT = process.env.PORT || 8080;
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
             // TODO: Initialize routes here (e.g., app.use('/api/users', userRoutes);)

@@ -1,10 +1,14 @@
 import connectDB from './config/db';
 import { app } from './config/db';
 import express, { Request, Response } from 'express';
-import { registerUser } from './auth/controller';
+import authRoutes from './routes/auth.routes';
+
 
 
 app.use(express.json());
+
+// Use auth routes
+app.use('/api/auth', authRoutes);
 
 // Basic GET request
 app.get('/', (req: Request, res: Response) => {
@@ -17,8 +21,6 @@ app.get('/api/status', (req: Request, res: Response) => {
     timestamp: new Date().toISOString() 
   });
 });
-
-app.post('/register', registerUser);
 
 
 
